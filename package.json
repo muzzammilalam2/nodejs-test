@@ -1,0 +1,26 @@
+{
+  "name": "user-login-registration",
+  "version": "1.0.0",
+  "description": "App to register and login using nodejs and mysql",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muzzammilalam2/nodejs-test.git"
+  },
+  "author": "Muzzammil Alam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/muzzammilalam2/nodejs-test/issues"
+  },
+  "homepage": "https://github.com/muzzammilalam2/nodejs-test#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "mysql2": "^2.3.3",
+    "password-validator": "^5.2.1",
+    "sequelize": "^6.19.0"
+  }
+}
