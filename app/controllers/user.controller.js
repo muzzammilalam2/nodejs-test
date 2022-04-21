@@ -1,14 +1,13 @@
 const passwordValidator = require("password-validator");
 const db = require("../models");
-const User = db.Users;
+const User = db.user;
 const Op = db.Sequelize.Op;
 // Create and Save a new User
 exports.create = (req, res) => {
-  // Validate request
-  if (!validateUser(req)) {
+  //Validate request
+  if (!validateUser(req, res)) {
     return;
   }
-
   // Create a User
   const user = {
     name: req.body.name,
@@ -27,6 +26,9 @@ exports.create = (req, res) => {
     });
 };
 exports.findOne = async (req, res) => {
+  if (!validateUser(req, res)) {
+    return;
+  }
   const userDetail = await User.findOne({
     where: { email: req.body.email, password: req.body.password },
   });
@@ -42,7 +44,8 @@ exports.findOne = async (req, res) => {
   return;
 };
 
-function validateUser(req) {
+// Validate User
+function validateUser(req, res) {
   if (!req.body.email || !req.body.password) {
     res.status(400).send({
       message: "Email or Password cant be empty",
@@ -52,10 +55,16 @@ function validateUser(req) {
   let email = req.body.email;
   let password = req.body.password;
   const emailRegexp =
-    "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/";
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   let emailValidated = emailRegexp.test(email);
   var schema = new passwordValidator();
-  schema.is().min(6).has().uppercase().has().lowercase();
+  schema
+    .is()
+    .min(6, "Password should contain min of 6 characters")
+    .has()
+    .uppercase()
+    .has()
+    .lowercase();
   let passwordValidated = schema.validate(password, { list: true });
   if (!emailValidated) {
     res.status(400).send({

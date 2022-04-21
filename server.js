@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-require("./app/routes/user.routes")(app);
+
 var corsOptions = {
   origin: "http://localhost:8081",
 };
@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to node application." });
 });
+require("./app/routes/user.routes")(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
