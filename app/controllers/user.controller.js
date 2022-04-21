@@ -25,22 +25,22 @@ exports.create = (req, res) => {
       });
     });
 };
-exports.findOne = async (req, res) => {
+exports.login = (req, res) => {
   if (!validateUser(req, res)) {
     return;
   }
-  const userDetail = await User.findOne({
+  User.findOne({
     where: { email: req.body.email, password: req.body.password },
-  });
-  if (userDetail == null) {
-    res.status(404).send({
-      message: "User not found",
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials.",
+      });
     });
-  }
-  res.status(200).send({
-    message: "Login Successful",
-    userDetail: userDetail,
-  });
   return;
 };
 
